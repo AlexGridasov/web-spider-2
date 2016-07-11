@@ -1,30 +1,37 @@
 package com.gri.alex.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
-import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
 /**
- * Created by Alex on 08/07/2016.
+ * Created by Alex on 08-Jul-16.
  */
 @Entity
 @Table(name = "BOOK")
 public class Book {
 
+    @JsonIgnore
     @Id
     @GeneratedValue
     @Column(name = "ID", unique = true, nullable = false)
-    private Integer id;
+    private Long id;
 
     @Column(name = "TITLE", nullable = false)
     private String title;
 
-    @Column(name = "LINK", nullable = false)
+    @Column(name = "LINK", nullable = false, length = 300)
     private String link;
+
+    @JsonIgnore
+    @ManyToOne
+    private Podcast podcast;
+
 
     public Book() {
     }
@@ -34,11 +41,12 @@ public class Book {
         this.link = link;
     }
 
-    public Integer getId() {
+
+    public Long getId() {
         return id;
     }
 
-    public void setId(Integer id) {
+    public void setId(Long id) {
         this.id = id;
     }
 
