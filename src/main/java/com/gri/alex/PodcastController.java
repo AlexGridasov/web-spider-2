@@ -53,6 +53,11 @@ public class PodcastController {
         return doc;
     }
 
+    /*public long getPageViews(Document doc) {
+        Elements pageViewsElements = doc.select("span[title=Количество просмотров].pageviews");
+        return douParser.parsePageViews(pageViewsElements.get(0));
+    }*/
+
     // TODO: split method
     public Podcast getPodcast(long podcastNumber) {
         Document doc = getHtmlDocument(podcastNumber);
@@ -62,20 +67,15 @@ public class PodcastController {
         Elements articlesElements = doc.select("article");
 
         if (articlesElements != null && articlesElements.size() > 0) {
-            // page views
-            Elements pageViewsElements = doc.select("span[title=Количество просмотров].pageviews");
-            long pageViews = douParser.parsePageViews(pageViewsElements.get(0));
+            long pageViews = douParser.parsePageViews(doc);
             LOGGER.info("Количество просмотров: " + pageViews);
 
-            // title
             String title = douParser.parseTitle(articlesElements);
             LOGGER.info("Заголовок : " + title);
 
-            // announcement
             String announcement = douParser.parseAnnouncement(articlesElements);
             LOGGER.info("Анонс : " + announcement);
 
-            // photo
             String guestPhoto = douParser.parseGuestPhoto(articlesElements);
             LOGGER.info("Фото : " + guestPhoto);
 

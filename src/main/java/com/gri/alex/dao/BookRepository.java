@@ -10,5 +10,5 @@ import java.util.Collection;
  */
 public interface BookRepository extends JpaRepository<Book, Long> {
 
-    Collection<Book> findByPodcastId(Long id);
+    Collection<Book> findByPodcastNumber(Long id);
 }

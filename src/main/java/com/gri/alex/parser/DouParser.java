@@ -2,6 +2,7 @@ package com.gri.alex.parser;
 
 import com.gri.alex.model.Book;
 import org.apache.log4j.Logger;
+import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
 import org.springframework.stereotype.Component;
@@ -20,9 +21,10 @@ public class DouParser implements Parser {
     private static final int MAX_LINK_SIZE = 300;
     private static final Logger LOGGER = Logger.getLogger(DouParser.class);
 
-    public long parsePageViews(Element elements) {
-        Elements pageViews = elements.select("span");
-        return Long.valueOf(pageViews.text());
+    public long parsePageViews(Document doc) {
+        Elements spanElements = doc.select("span[title=Количество просмотров].pageviews");
+        Element spanElement = spanElements.get(0);
+        return Long.valueOf(spanElement.text());
     }
 
     public String parseTitle(Elements elements) {

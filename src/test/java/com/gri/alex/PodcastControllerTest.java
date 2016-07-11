@@ -1,6 +1,7 @@
 package com.gri.alex;
 
 import com.gri.alex.model.Podcast;
+import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.junit.Before;
 import org.junit.Test;
@@ -17,7 +18,6 @@ import javax.imageio.ImageIO;
 import java.awt.*;
 import java.io.File;
 import java.io.IOException;
-import java.net.URL;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
@@ -32,8 +32,10 @@ public class PodcastControllerTest {
 
     @Autowired
     private ResourceLoader resourceLoader;
-    @Mock
+    @Autowired
     private PodcastController podcastController;
+    @Mock
+    private PodcastController podcastControllerMock;
 
     private Document doc;
     private Image image;
@@ -43,7 +45,8 @@ public class PodcastControllerTest {
         MockitoAnnotations.initMocks(this);
 
         Resource htmlResource = resourceLoader.getResource("article.html");
-        doc = new Document(htmlResource.getURI().getPath());
+        File htmlFile = new File(htmlResource.getURI());
+        doc = Jsoup.parse(htmlFile, "UTF-8", "https://dou.ua/lenta/interviews/it-career-0");
 
         Resource imageResource = resourceLoader.getResource("alex_kalinovsky.jpg");
         image = ImageIO.read(imageResource.getInputStream());
@@ -51,20 +54,20 @@ public class PodcastControllerTest {
 
     @Test
     public void getHtmlDocument() throws Exception {
-        when(podcastController.getHtmlDocument(0))
+        when(podcastControllerMock.getHtmlDocument(0))
                 .thenReturn(doc);
 
-        Document document = podcastController.getHtmlDocument(0);
+        Document document = podcastControllerMock.getHtmlDocument(0);
 
         assertNotNull(document);
     }
 
     @Test
     public void getImage() {
-        when(podcastController.getImage(""))
+        when(podcastControllerMock.getImage(""))
                 .thenReturn(image);
 
-        Image photo = podcastController.getImage("");
+        Image photo = podcastControllerMock.getImage("");
 
         assertNotNull(photo);
     }
@@ -72,10 +75,10 @@ public class PodcastControllerTest {
     @Test
     public void parsePodcastHtml() throws Exception {
         Podcast podcast = new Podcast();
-        when(podcastController.getPodcast(0))
-                .thenReturn(new Podcast());
+        when(podcastControllerMock.getPodcast(0))
+        .thenReturn(new Podcast());
 
-        Podcast podcast1 = podcastController.getPodcast(0);
+        Podcast podcast1 = podcastControllerMock.getPodcast(0);
 
         assertEquals(podcast, podcast1);
     }
