@@ -1,6 +1,7 @@
 package com.gri.alex;
 
 import com.gri.alex.model.Podcast;
+import org.apache.commons.io.IOUtils;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.junit.Before;
@@ -18,6 +19,8 @@ import javax.imageio.ImageIO;
 import java.awt.*;
 import java.io.File;
 import java.io.IOException;
+import java.io.InputStream;
+import java.net.URL;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
@@ -32,13 +35,11 @@ public class PodcastControllerTest {
 
     @Autowired
     private ResourceLoader resourceLoader;
-    @Autowired
-    private PodcastController podcastController;
     @Mock
     private PodcastController podcastControllerMock;
 
     private Document doc;
-    private Image image;
+    private byte[] image;
 
     @Before
     public void setUp() throws IOException {
@@ -49,7 +50,15 @@ public class PodcastControllerTest {
         doc = Jsoup.parse(htmlFile, "UTF-8", "https://dou.ua/lenta/interviews/it-career-0");
 
         Resource imageResource = resourceLoader.getResource("alex_kalinovsky.jpg");
-        image = ImageIO.read(imageResource.getInputStream());
+        InputStream imageStream = null;
+        try {
+            imageStream = imageResource.getInputStream();
+            image = IOUtils.toByteArray(imageStream);
+        } catch (IOException e) {
+            e.printStackTrace();
+        } finally {
+            IOUtils.closeQuietly(imageStream);
+        }
     }
 
     @Test
@@ -67,7 +76,7 @@ public class PodcastControllerTest {
         when(podcastControllerMock.getImage(""))
                 .thenReturn(image);
 
-        Image photo = podcastControllerMock.getImage("");
+        byte[] photo = podcastControllerMock.getImage("");
 
         assertNotNull(photo);
     }

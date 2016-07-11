@@ -3,22 +3,23 @@ package com.gri.alex;
 import com.gri.alex.model.Book;
 import com.gri.alex.model.Podcast;
 import com.gri.alex.parser.DouParser;
+import org.apache.commons.io.IOUtils;
 import org.apache.log4j.Logger;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.io.Resource;
+import org.springframework.core.io.ResourceLoader;
 import org.springframework.stereotype.Component;
 import org.springframework.util.StringUtils;
 
-import javax.imageio.ImageIO;
-import java.awt.*;
+import java.io.File;
+import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
-import java.net.MalformedURLException;
 import java.net.URL;
-import java.sql.Blob;
 import java.util.List;
 import java.util.Set;
 
@@ -31,6 +32,8 @@ public class PodcastController {
     final static Logger LOGGER = Logger.getLogger(PodcastController.class);
     final static String PODCAST_URL = "https://dou.ua/lenta/interviews/it-career-";
 
+    @Autowired
+    private ResourceLoader resourceLoader;
     private DouParser douParser;
 
     @Autowired
@@ -98,7 +101,7 @@ public class PodcastController {
                     podcast.setPageViews(pageViews);
                     podcast.setTitle(title);
                     podcast.setAnnouncement(announcement);
-                    podcast.setGuestPhoto((Blob) getImage(guestPhoto));
+                    podcast.setGuestPhoto(getImage(guestPhoto));
                     podcast.setContents(StringUtils.collectionToDelimitedString(contents, "|"));
                     podcast.setBooks(bookSet);
 
@@ -110,15 +113,19 @@ public class PodcastController {
         return null;
     }
 
-    public Image getImage(String guestPhoto) {
-        URL url;
-        Image image = null;
+    public byte[] getImage(String guestPhoto) {
+        InputStream imageStream = null;
+        byte[] image = null;
+
         try {
-            url = new URL(guestPhoto);
-            image = ImageIO.read(url);
+            imageStream = new URL(guestPhoto).openStream();
+            image = IOUtils.toByteArray(imageStream);
         } catch (IOException e) {
             e.printStackTrace();
+        } finally {
+            IOUtils.closeQuietly(imageStream);
         }
+
         return image;
     }
 

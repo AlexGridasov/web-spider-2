@@ -15,8 +15,6 @@ public class WebSpider2Application {
     private static PodcastController controller;
 
     public static void main(String[] args) {
-//        SpringApplication.run(WebSpider2Application.class, args);
-
         ApplicationContext ctx = SpringApplication.run(WebSpider2Application.class, args);
         controller = (PodcastController) ctx.getBean("podcastController");
         controller.getPodcast(259);

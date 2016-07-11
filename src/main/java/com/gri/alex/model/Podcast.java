@@ -4,6 +4,7 @@ package com.gri.alex.model;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
+import javax.persistence.Lob;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import java.sql.Blob;
@@ -34,8 +35,9 @@ public class Podcast {
     @Column(name = "CONTENTS", unique = true, nullable = false)
     private String contents;
 
+    @Lob
     @Column(name = "GUEST_PHOTO")
-    private Blob guestPhoto;
+    private byte[] guestPhoto;
 
     @OneToMany(mappedBy = "podcast")
     private Set<Book> books = new HashSet<>();
@@ -84,11 +86,11 @@ public class Podcast {
         this.contents = contents;
     }
 
-    public Blob getGuestPhoto() {
+    public byte[] getGuestPhoto() {
         return guestPhoto;
     }
 
-    public void setGuestPhoto(Blob guestPhoto) {
+    public void setGuestPhoto(byte[] guestPhoto) {
         this.guestPhoto = guestPhoto;
     }
 
