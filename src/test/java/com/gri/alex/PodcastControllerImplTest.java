@@ -1,5 +1,6 @@
 package com.gri.alex;
 
+import com.gri.alex.controller.PodcastControllerImpl;
 import com.gri.alex.model.Podcast;
 import org.apache.commons.io.IOUtils;
 import org.jsoup.Jsoup;
@@ -15,12 +16,9 @@ import org.springframework.core.io.Resource;
 import org.springframework.core.io.ResourceLoader;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
-import javax.imageio.ImageIO;
-import java.awt.*;
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
-import java.net.URL;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
@@ -31,12 +29,12 @@ import static org.mockito.Mockito.when;
  */
 @RunWith(SpringJUnit4ClassRunner.class)
 @SpringApplicationConfiguration(classes = WebSpider2Application.class)
-public class PodcastControllerTest {
+public class PodcastControllerImplTest {
 
     @Autowired
     private ResourceLoader resourceLoader;
     @Mock
-    private PodcastController podcastControllerMock;
+    private PodcastControllerImpl podcastControllerImplMock;
 
     private Document doc;
     private byte[] image;
@@ -63,20 +61,20 @@ public class PodcastControllerTest {
 
     @Test
     public void getHtmlDocument() throws Exception {
-        when(podcastControllerMock.getHtmlDocument(0))
+        when(podcastControllerImplMock.getHtmlDocument(0))
                 .thenReturn(doc);
 
-        Document document = podcastControllerMock.getHtmlDocument(0);
+        Document document = podcastControllerImplMock.getHtmlDocument(0);
 
         assertNotNull(document);
     }
 
     @Test
     public void getImage() {
-        when(podcastControllerMock.getImage(""))
+        when(podcastControllerImplMock.getImage(""))
                 .thenReturn(image);
 
-        byte[] photo = podcastControllerMock.getImage("");
+        byte[] photo = podcastControllerImplMock.getImage("");
 
         assertNotNull(photo);
     }
@@ -84,10 +82,10 @@ public class PodcastControllerTest {
     @Test
     public void parsePodcastHtml() throws Exception {
         Podcast podcast = new Podcast();
-        when(podcastControllerMock.getPodcast(0))
+        when(podcastControllerImplMock.getPodcast(0))
         .thenReturn(new Podcast());
 
-        Podcast podcast1 = podcastControllerMock.getPodcast(0);
+        Podcast podcast1 = podcastControllerImplMock.getPodcast(0);
 
         assertEquals(podcast, podcast1);
     }

@@ -1,12 +1,11 @@
 package com.gri.alex.service;
 
+import com.gri.alex.dao.BookRepository;
 import com.gri.alex.dao.PodcastRepository;
+import com.gri.alex.model.Book;
 import com.gri.alex.model.Podcast;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-
-import java.util.List;
-import java.util.Optional;
 
 
 /**
@@ -15,23 +14,27 @@ import java.util.Optional;
 @Service
 public class PodcastServiceImpl implements PodcastService {
 
-    private PodcastRepository repository;
-
     @Autowired
-    public PodcastServiceImpl(PodcastRepository repository) {
-        this.repository = repository;
+    private PodcastRepository podcastRepository;
+    @Autowired
+    private BookRepository bookRepository;
+
+    public PodcastServiceImpl() {
     }
 
 
     public void savePodcast(Podcast podcast) {
-//        repository.savePodcast(podcast);
+        for (Book book : podcast.getBooks()) {
+            bookRepository.save(book);
+        }
+        podcastRepository.save(podcast);
     }
 
     public void deletePodcast(Podcast podcast) {
-//        repository.deletePodcast(podcast);
+//        podcastRepository.deletePodcast(podcast);
     }
 
-    public Optional<Podcast> findById(int number) {
-        return repository.findByNumber(number);
+    public Podcast findByNumber(long number) {
+        return podcastRepository.findOne(number);
     }
 }

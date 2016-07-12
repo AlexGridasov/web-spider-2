@@ -1,6 +1,8 @@
 package com.gri.alex;
 
+import com.gri.alex.controller.PodcastControllerImpl;
 import com.gri.alex.model.Podcast;
+import com.gri.alex.service.PodcastService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -15,18 +17,20 @@ import org.springframework.web.bind.annotation.RestController;
 @RequestMapping("/podcast")
 public class WebSpiderController {
 
-    private PodcastController controller;
-
     @Autowired
-    public WebSpiderController(PodcastController controller) {
-        this.controller = controller;
+    private PodcastControllerImpl podcastController;
+    @Autowired
+    private PodcastService podcastService;
+
+    public WebSpiderController() {
     }
 
 
     @RequestMapping(method = RequestMethod.GET)
-    public Podcast createPodcast(@RequestParam(value = "id", defaultValue = "259") String id, Model model) {
+    public Podcast getPodcast(@RequestParam(value = "id", defaultValue = "259") String id, Model model) {
 
-        return controller.getPodcast(259);
+//        return podcastController.getPodcast(259);
+        return podcastService.findByNumber(259);
     }
 
     @RequestMapping("/")

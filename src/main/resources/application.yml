@@ -1,0 +1,18 @@
+spring:
+    profiles.active: dev
+---
+spring:
+    profiles: dev
+
+    datasource:
+        url: jdbc:h2:mem:AZ;DB_CLOSE_DELAY=-1;DB_CLOSE_ON_EXIT=FALSE
+        driverClassName: org.h2.Driver
+        username: sa
+        password:
+    jpa.database-platform: org.hibernate.dialect.H2Dialect
+
+    jpa.hibernate.ddl-auto: create-drop
+
+logging.level.org.hibernate.SQL: DEBUG
+logging.level.org.hibernate.type.descriptor.sql.BasicBinder: TRACE
+logging.level.org.hibernate.type: TRACE

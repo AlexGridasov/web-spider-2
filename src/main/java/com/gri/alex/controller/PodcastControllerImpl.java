@@ -1,4 +1,4 @@
-package com.gri.alex;
+package com.gri.alex.controller;
 
 import com.gri.alex.model.Book;
 import com.gri.alex.model.Podcast;
@@ -10,13 +10,10 @@ import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.core.io.Resource;
 import org.springframework.core.io.ResourceLoader;
 import org.springframework.stereotype.Component;
 import org.springframework.util.StringUtils;
 
-import java.io.File;
-import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.URL;
@@ -26,19 +23,18 @@ import java.util.Set;
 /**
  * Created by Alex on 09-Jul-16.
  */
-@Component(value = "podcastController")
-public class PodcastController {
+@Component
+public class PodcastControllerImpl implements PodcastController {
 
-    final static Logger LOGGER = Logger.getLogger(PodcastController.class);
+    final static Logger LOGGER = Logger.getLogger(PodcastControllerImpl.class);
     final static String PODCAST_URL = "https://dou.ua/lenta/interviews/it-career-";
 
     @Autowired
     private ResourceLoader resourceLoader;
+    @Autowired
     private DouParser douParser;
 
-    @Autowired
-    public PodcastController(DouParser douParser) {
-        this.douParser = douParser;
+    public PodcastControllerImpl() {
     }
 
     public Document getHtmlDocument(long podcastNumber) {
@@ -47,7 +43,7 @@ public class PodcastController {
             // need http protocol
             doc = Jsoup
                     .connect(PODCAST_URL + podcastNumber)
-                    .userAgent("Mozilla")
+                    .userAgent("Chrome")
                     .get();
         } catch (IOException e) {
             e.printStackTrace();
@@ -55,11 +51,6 @@ public class PodcastController {
 
         return doc;
     }
-
-    /*public long getPageViews(Document doc) {
-        Elements pageViewsElements = doc.select("span[title=Количество просмотров].pageviews");
-        return douParser.parsePageViews(pageViewsElements.get(0));
-    }*/
 
     // TODO: split method
     public Podcast getPodcast(long podcastNumber) {
@@ -101,8 +92,8 @@ public class PodcastController {
                     podcast.setPageViews(pageViews);
                     podcast.setTitle(title);
                     podcast.setAnnouncement(announcement);
-                    podcast.setGuestPhoto(getImage(guestPhoto));
-                    podcast.setContents(StringUtils.collectionToDelimitedString(contents, "|"));
+//                    podcast.setGuestPhoto(getImage(guestPhoto));
+                    podcast.setContents(StringUtils.collectionToDelimitedString(contents, "||"));
                     podcast.setBooks(bookSet);
 
                     return podcast;

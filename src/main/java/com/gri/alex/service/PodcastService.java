@@ -1,9 +1,7 @@
 package com.gri.alex.service;
 
 import com.gri.alex.model.Podcast;
-import org.springframework.stereotype.Service;
 
-import java.util.List;
 import java.util.Optional;
 
 /**
@@ -15,6 +13,6 @@ public interface PodcastService {
 
     void deletePodcast(Podcast podcast);
 
-    Optional<Podcast> findById(int id);
+    Podcast findByNumber(long number);
 
 }

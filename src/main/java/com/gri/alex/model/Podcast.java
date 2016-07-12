@@ -7,7 +7,6 @@ import javax.persistence.Id;
 import javax.persistence.Lob;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
-import java.sql.Blob;
 import java.util.HashSet;
 import java.util.Objects;
 import java.util.Set;
@@ -32,7 +31,7 @@ public class Podcast {
     @Column(name = "ANNOUNCEMENT", unique = true, nullable = false)
     private String announcement;
 
-    @Column(name = "CONTENTS", unique = true, nullable = false)
+    @Column(name = "CONTENTS", unique = true, nullable = false, length = 1000)
     private String contents;
 
     @Lob
