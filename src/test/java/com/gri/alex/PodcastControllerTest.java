@@ -1,6 +1,6 @@
 package com.gri.alex;
 
-import com.gri.alex.controller.PodcastControllerImpl;
+import com.gri.alex.controller.PodcastController;
 import com.gri.alex.model.Podcast;
 import org.apache.commons.io.IOUtils;
 import org.jsoup.Jsoup;
@@ -29,12 +29,12 @@ import static org.mockito.Mockito.when;
  */
 @RunWith(SpringJUnit4ClassRunner.class)
 @SpringApplicationConfiguration(classes = WebSpider2Application.class)
-public class PodcastControllerImplTest {
+public class PodcastControllerTest {
 
     @Autowired
     private ResourceLoader resourceLoader;
     @Mock
-    private PodcastControllerImpl podcastControllerImplMock;
+    private PodcastController podcastControllerMock;
 
     private Document doc;
     private byte[] image;
@@ -61,20 +61,20 @@ public class PodcastControllerImplTest {
 
     @Test
     public void getHtmlDocument() throws Exception {
-        when(podcastControllerImplMock.getHtmlDocument(0))
+        when(podcastControllerMock.getHtmlDocument(0))
                 .thenReturn(doc);
 
-        Document document = podcastControllerImplMock.getHtmlDocument(0);
+        Document document = podcastControllerMock.getHtmlDocument(0);
 
         assertNotNull(document);
     }
 
     @Test
     public void getImage() {
-        when(podcastControllerImplMock.getImage(""))
+        when(podcastControllerMock.getImage(""))
                 .thenReturn(image);
 
-        byte[] photo = podcastControllerImplMock.getImage("");
+        byte[] photo = podcastControllerMock.getImage("");
 
         assertNotNull(photo);
     }
@@ -82,10 +82,10 @@ public class PodcastControllerImplTest {
     @Test
     public void parsePodcastHtml() throws Exception {
         Podcast podcast = new Podcast();
-        when(podcastControllerImplMock.getPodcast(0))
+        when(podcastControllerMock.getPodcast(0))
         .thenReturn(new Podcast());
 
-        Podcast podcast1 = podcastControllerImplMock.getPodcast(0);
+        Podcast podcast1 = podcastControllerMock.getPodcast(0);
 
         assertEquals(podcast, podcast1);
     }

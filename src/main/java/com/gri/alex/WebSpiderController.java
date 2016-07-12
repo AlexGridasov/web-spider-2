@@ -1,10 +1,11 @@
 package com.gri.alex;
 
-import com.gri.alex.controller.PodcastControllerImpl;
+import com.gri.alex.controller.PodcastController;
 import com.gri.alex.model.Podcast;
 import com.gri.alex.service.PodcastService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -18,7 +19,7 @@ import org.springframework.web.bind.annotation.RestController;
 public class WebSpiderController {
 
     @Autowired
-    private PodcastControllerImpl podcastController;
+    private PodcastController podcastController;
     @Autowired
     private PodcastService podcastService;
 
@@ -26,14 +27,19 @@ public class WebSpiderController {
     }
 
 
-    @RequestMapping(method = RequestMethod.GET)
-    public Podcast getPodcast(@RequestParam(value = "id", defaultValue = "259") String id, Model model) {
+    @RequestMapping(value = "/parser/{number}", method = RequestMethod.GET)
+    public Podcast parsePodcast(@PathVariable(value = "number") Long number, Model model) {
 
-//        return podcastController.getPodcast(259);
-        return podcastService.findByNumber(259);
+        return podcastController.getPodcast(number);
     }
 
-    @RequestMapping("/")
+    @RequestMapping(value = "/{number}", method = RequestMethod.GET)
+    public Podcast getPodcast(@PathVariable(value = "number") Long number, Model model) {
+
+        return podcastService.findByNumber(number);
+    }
+
+    @RequestMapping("/hi")
     public String index() {
 
         return "Greetings from Web Spider!";

@@ -16,7 +16,7 @@ import java.util.Set;
  * Created by Alex on 09-Jul-16.
  */
 @Component
-public class DouParser implements Parser {
+public class DouParser {
 
     private static final int MAX_LINK_SIZE = 300;
     private static final Logger LOGGER = Logger.getLogger(DouParser.class);

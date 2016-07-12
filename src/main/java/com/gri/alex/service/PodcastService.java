@@ -1,18 +1,36 @@
 package com.gri.alex.service;
 
+import com.gri.alex.dao.BookRepository;
+import com.gri.alex.dao.PodcastRepository;
+import com.gri.alex.model.Book;
 import com.gri.alex.model.Podcast;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
-import java.util.Optional;
 
 /**
- * Created by Alex on 10-Jul-16.
+ * Created by Alex on 10-Jul-165.
  */
-public interface PodcastService {
+@Service
+public class PodcastService {
 
-    void savePodcast(Podcast podcast);
+    @Autowired
+    private PodcastRepository podcastRepository;
+    @Autowired
+    private BookRepository bookRepository;
 
-    void deletePodcast(Podcast podcast);
+    public PodcastService() {
+    }
 
-    Podcast findByNumber(long number);
 
+    public void savePodcast(Podcast podcast) {
+        for (Book book : podcast.getBooks()) {
+            bookRepository.save(book);
+        }
+        podcastRepository.save(podcast);
+    }
+
+    public Podcast findByNumber(long number) {
+        return podcastRepository.findOne(number);
+    }
 }

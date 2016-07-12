@@ -1,6 +1,8 @@
 package com.gri.alex.model;
 
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
@@ -34,6 +36,7 @@ public class Podcast {
     @Column(name = "CONTENTS", unique = true, nullable = false, length = 1000)
     private String contents;
 
+    @JsonIgnore
     @Lob
     @Column(name = "GUEST_PHOTO")
     private byte[] guestPhoto;

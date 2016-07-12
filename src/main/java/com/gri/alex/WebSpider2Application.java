@@ -1,10 +1,8 @@
 package com.gri.alex;
 
 import com.gri.alex.controller.PodcastController;
-import com.gri.alex.controller.PodcastControllerImpl;
 import com.gri.alex.model.Podcast;
 import com.gri.alex.service.PodcastService;
-import com.gri.alex.service.PodcastServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
@@ -23,8 +21,8 @@ public class WebSpider2Application {
 
     public static void main(String[] args) {
         ApplicationContext ctx = SpringApplication.run(WebSpider2Application.class, args);
-        podcastController = ctx.getBean("podcastControllerImpl", PodcastControllerImpl.class);
-        podcastService = ctx.getBean("podcastServiceImpl", PodcastServiceImpl.class);
+        podcastController = ctx.getBean("podcastController", PodcastController.class);
+        podcastService = ctx.getBean("podcastService", PodcastService.class);
 
         Podcast podcast = podcastController.getPodcast(259L);
         podcastService.savePodcast(podcast);
