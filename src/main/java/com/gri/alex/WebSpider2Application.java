@@ -7,11 +7,13 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.ApplicationContext;
+import org.springframework.scheduling.annotation.EnableScheduling;
 
 /**
  * Created by Alex on 08-Jul-16.
  */
 @SpringBootApplication
+@EnableScheduling
 public class WebSpider2Application {
 
     @Autowired
@@ -24,7 +26,9 @@ public class WebSpider2Application {
         podcastController = ctx.getBean("podcastController", PodcastController.class);
         podcastService = ctx.getBean("podcastService", PodcastService.class);
 
-        Podcast podcast = podcastController.getPodcast(259L);
+        Long podcastNumber = 259L;
+        Podcast podcast = podcastController.getPodcastByNumber(podcastNumber);
+
         podcastService.savePodcast(podcast);
     }
 }

@@ -1,7 +1,6 @@
 package com.gri.alex;
 
 import com.gri.alex.controller.PodcastController;
-import com.gri.alex.model.Podcast;
 import org.apache.commons.io.IOUtils;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
@@ -20,7 +19,6 @@ import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 
-import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 import static org.mockito.Mockito.when;
 
@@ -77,17 +75,6 @@ public class PodcastControllerTest {
         byte[] photo = podcastControllerMock.getImage("");
 
         assertNotNull(photo);
-    }
-
-    @Test
-    public void parsePodcastHtml() throws Exception {
-        Podcast podcast = new Podcast();
-        when(podcastControllerMock.getPodcast(0))
-        .thenReturn(new Podcast());
-
-        Podcast podcast1 = podcastControllerMock.getPodcast(0);
-
-        assertEquals(podcast, podcast1);
     }
 
 }

@@ -68,7 +68,7 @@ public class DouParserTest {
     @Test
     public void testParseAnnouncement() throws Exception {
         String announcement = douParser.parseAnnouncement(articlesElements);
-        assertEquals("259-й выпуск подкаста «Откровенно про IT карьеризм». В подкасте пойдет речь о программировании и предпринимательстве.", announcement);
+        assertEquals("259-й выпуск подкаста «Откровенно про IT карьеризм». В подкасте пойдет речь о программировании и предпринимательстве.", announcement);
     }
 
     @Test

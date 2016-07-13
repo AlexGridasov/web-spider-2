@@ -2,7 +2,6 @@ package com.gri.alex.model;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
-import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -18,7 +17,6 @@ import javax.persistence.Table;
 @Table(name = "BOOK")
 public class Book {
 
-    @JsonIgnore
     @Id
     @GeneratedValue
     @Column(name = "ID", unique = true, nullable = false)
@@ -32,7 +30,7 @@ public class Book {
 
     @JsonIgnore
     @ManyToOne
-    @JoinColumn(name = "NUMBER")
+    @JoinColumn(name = "PODCAST_NUM")
     private Podcast podcast;
 
 
@@ -75,6 +73,9 @@ public class Book {
 
     public void setPodcast(Podcast podcast) {
         this.podcast = podcast;
+        if (!podcast.getBooks().contains(this)) {
+            podcast.getBooks().add(this);
+        }
     }
 
     @Override

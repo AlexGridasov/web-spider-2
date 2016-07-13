@@ -1,11 +1,14 @@
 package com.gri.alex.parser;
 
 import com.gri.alex.model.Book;
+import com.gri.alex.model.GuestPhoto;
+import com.gri.alex.model.Podcast;
 import org.apache.log4j.Logger;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
 import org.springframework.stereotype.Component;
+import org.springframework.util.StringUtils;
 
 import java.util.ArrayList;
 import java.util.HashSet;
@@ -21,26 +24,71 @@ public class DouParser {
     private static final int MAX_LINK_SIZE = 300;
     private static final Logger LOGGER = Logger.getLogger(DouParser.class);
 
+    public Podcast parseDocument(Document doc) {
+        Podcast podcast = new Podcast();
+        Elements articleElements = doc.select("article");
+
+        if (articleElements != null && articleElements.size() > 0) {
+            long pageViews = parsePageViews(doc);
+            String title = parseTitle(articleElements);
+            String announcement = parseAnnouncement(articleElements);
+            String guestPhoto = parseGuestPhoto(articleElements);
+
+            Elements lists = articleElements.select("ul");
+
+            if (lists.size() > 0) {
+                // contents
+                List<String> contents = parseContents(lists.get(0));
+
+                if (lists.size() > 1) {
+                    // books
+                    Set<Book> bookSet = parseBooks(lists.get(1), "li");
+
+                    podcast.setPageViews(pageViews);
+                    podcast.setTitle(title);
+                    podcast.setAnnouncement(announcement);
+                    podcast.setGuestPhoto(new GuestPhoto(guestPhoto));
+                    podcast.setContents(StringUtils.collectionToDelimitedString(contents, "||"));
+                    podcast.setBooks(bookSet);
+                }
+            }
+        }
+
+        return podcast;
+    }
+
     public long parsePageViews(Document doc) {
         Elements spanElements = doc.select("span[title=Количество просмотров].pageviews");
         Element spanElement = spanElements.get(0);
-        return Long.valueOf(spanElement.text());
+        long pageViews = Long.valueOf(spanElement.text());
+        LOGGER.info("Количество просмотров: " + pageViews);
+
+        return pageViews;
     }
 
     public String parseTitle(Elements elements) {
         Elements articleTitle = elements.select("h1");
-        return articleTitle.text();
+        String title = articleTitle.text();
+        LOGGER.info("Заголовок : " + title);
+
+        return title;
     }
 
     public String parseAnnouncement(Elements elements) {
-        Element announcement = elements.select("p").first();
-        return announcement.text();
+        Element announcementElement = elements.select("p").first();
+        String announcement = announcementElement.text();
+        LOGGER.info("Анонс : " + announcement);
+
+        return announcement;
     }
 
     public String parseGuestPhoto(Elements elements) {
-        Element guestPhoto = elements.select("p").first()
+        Element guestPhotoElement = elements.select("p").first()
                                      .select("img").first();
-        return guestPhoto.attr("src");
+        String guestPhoto = guestPhotoElement.attr("src");
+        LOGGER.info("Фото : " + guestPhoto);
+
+        return guestPhoto;
     }
 
     public List<String> parseContents(Element element) {
@@ -50,6 +98,7 @@ public class DouParser {
         for (Element theme : themes) {
             themeList.add(theme.text());
         }
+        LOGGER.info("Содержание : " + themeList.size());
 
         return themeList;
     }
@@ -69,6 +118,7 @@ public class DouParser {
 
             bookList.add(new Book(bookTitle, bookLink));
         }
+        LOGGER.info("Книги : " + bookList.size());
 
         return bookList;
     }

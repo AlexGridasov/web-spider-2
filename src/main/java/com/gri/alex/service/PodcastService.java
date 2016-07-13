@@ -7,7 +7,6 @@ import com.gri.alex.model.Podcast;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-
 /**
  * Created by Alex on 10-Jul-165.
  */
@@ -24,9 +23,6 @@ public class PodcastService {
 
 
     public void savePodcast(Podcast podcast) {
-        for (Book book : podcast.getBooks()) {
-            bookRepository.save(book);
-        }
         podcastRepository.save(podcast);
     }
 
