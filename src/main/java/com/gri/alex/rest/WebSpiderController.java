@@ -29,7 +29,7 @@ public class WebSpiderController {
     @RequestMapping(value = "/parser/{number}", method = RequestMethod.GET)
     public Podcast parsePodcast(@PathVariable(value = "number") Long number, Model model) {
 
-        return podcastController.getPodcastByNumber(number);
+        return podcastController.createPodcastByNumber(number);
     }
 
     @RequestMapping(value = "/{number}", method = RequestMethod.GET)

@@ -1,6 +1,5 @@
 package com.gri.alex.controller;
 
-import com.gri.alex.model.GuestPhoto;
 import com.gri.alex.model.Podcast;
 import com.gri.alex.parser.DouParser;
 import org.apache.commons.io.IOUtils;
@@ -30,15 +29,15 @@ public class PodcastController {
     public PodcastController() {
     }
 
-    public Podcast getPodcastByNumber(long podcastNumber) {
+    public Podcast createPodcastByNumber(long podcastNumber) {
         LOGGER.info("Выпуск : " + podcastNumber);
 
         Document doc = getHtmlDocument(podcastNumber);
         Podcast podcast = douParser.parseDocument(doc);
         podcast.setNumber(podcastNumber);
 
-        String photoLink = podcast.getGuestPhoto().getPhotoLink();
-        podcast.updateGuestPhoto(getImage(photoLink), photoLink);
+//        String photoLink = podcast.getGuestPhoto().getPhotoLink();
+//        podcast.updateGuestPhoto(getImage(photoLink), photoLink);
 
         return podcast;
     }
@@ -75,10 +74,6 @@ public class PodcastController {
         }
 
         return image;
-    }
-
-    public boolean isNewPodcastExist() {
-        return false;
     }
 
 }

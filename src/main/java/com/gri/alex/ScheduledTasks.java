@@ -28,14 +28,12 @@ public class ScheduledTasks {
         System.out.println("The time is now " + dateFormat.format(new Date()));
     }
 
-    @Scheduled(fixedRate = 2000)
+//    @Scheduled(fixedRate = 2000)
     public void checkNewPodcast() {
-        if (podcastController.isNewPodcastExist()) {
-            //TODO: get next Podcast number
-            Long podcastNumber = 0L;
-            Podcast podcast = podcastController.getPodcastByNumber(podcastNumber);
+        //TODO: get next Podcast number
+        Long podcastNumber = 0L;
+        Podcast podcast = podcastController.createPodcastByNumber(podcastNumber);
 
-            podcastService.savePodcast(podcast);
-        }
+        podcastService.savePodcast(podcast);
     }
 }

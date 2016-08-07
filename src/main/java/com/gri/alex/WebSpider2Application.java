@@ -8,12 +8,14 @@ import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.ApplicationContext;
 import org.springframework.scheduling.annotation.EnableScheduling;
+import org.springframework.transaction.annotation.EnableTransactionManagement;
 
 /**
  * Created by Alex on 08-Jul-16.
  */
 @SpringBootApplication
 @EnableScheduling
+@EnableTransactionManagement
 public class WebSpider2Application {
 
     @Autowired
@@ -26,9 +28,12 @@ public class WebSpider2Application {
         podcastController = ctx.getBean("podcastController", PodcastController.class);
         podcastService = ctx.getBean("podcastService", PodcastService.class);
 
-        Long podcastNumber = 259L;
-        Podcast podcast = podcastController.getPodcastByNumber(podcastNumber);
+        // 43 first, 267 last
+        for (long index = 50; index <= 100; index++) {
+            Long podcastNumber = index;
+            Podcast podcast = podcastController.createPodcastByNumber(podcastNumber);
 
-        podcastService.savePodcast(podcast);
+            podcastService.savePodcast(podcast);
+        }
     }
 }

@@ -1,8 +1,6 @@
 package com.gri.alex.service;
 
-import com.gri.alex.dao.BookRepository;
 import com.gri.alex.dao.PodcastRepository;
-import com.gri.alex.model.Book;
 import com.gri.alex.model.Podcast;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -15,8 +13,6 @@ public class PodcastService {
 
     @Autowired
     private PodcastRepository podcastRepository;
-    @Autowired
-    private BookRepository bookRepository;
 
     public PodcastService() {
     }

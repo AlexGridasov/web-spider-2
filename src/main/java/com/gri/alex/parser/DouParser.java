@@ -1,7 +1,6 @@
 package com.gri.alex.parser;
 
 import com.gri.alex.model.Book;
-import com.gri.alex.model.GuestPhoto;
 import com.gri.alex.model.Podcast;
 import org.apache.log4j.Logger;
 import org.jsoup.nodes.Document;
@@ -23,6 +22,7 @@ public class DouParser {
 
     private static final int MAX_LINK_SIZE = 300;
     private static final Logger LOGGER = Logger.getLogger(DouParser.class);
+    public static final String HTTPS_PREFIX = "https:";
 
     public Podcast parseDocument(Document doc) {
         Podcast podcast = new Podcast();
@@ -47,7 +47,7 @@ public class DouParser {
                     podcast.setPageViews(pageViews);
                     podcast.setTitle(title);
                     podcast.setAnnouncement(announcement);
-                    podcast.setGuestPhoto(new GuestPhoto(guestPhoto));
+                    podcast.setPhotoLink(guestPhoto);
                     podcast.setContents(StringUtils.collectionToDelimitedString(contents, "||"));
                     podcast.setBooks(bookSet);
                 }
@@ -83,9 +83,11 @@ public class DouParser {
     }
 
     public String parseGuestPhoto(Elements elements) {
-        Element guestPhotoElement = elements.select("p").first()
-                                     .select("img").first();
+        Element guestPhotoElement = elements.select("img").first();
         String guestPhoto = guestPhotoElement.attr("src");
+        if (!guestPhoto.contains(HTTPS_PREFIX)) {
+            guestPhoto = "https:" + guestPhoto;
+        }
         LOGGER.info("Фото : " + guestPhoto);
 
         return guestPhoto;

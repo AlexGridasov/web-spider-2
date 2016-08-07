@@ -27,27 +27,27 @@ public class Podcast {
     @Column(name = "TITLE", unique = true, nullable = false)
     private String title;
 
-    @Column(name = "ANNOUNCEMENT", unique = true, nullable = false)
+    @Column(name = "ANNOUNCEMENT", unique = true)
     private String announcement;
 
     @Column(name = "CONTENTS", unique = true, nullable = false, length = 1000)
     private String contents;
 
+    @Column(name = "PHOTO_LINK")
+    private String photoLink;
+
     @OneToMany(mappedBy = "podcast", cascade = CascadeType.ALL)
     private Set<Book> books = new HashSet<>();
-
-    private GuestPhoto guestPhoto;
-
 
     public Podcast() {
     }
 
-    public void updateGuestPhoto(final byte[] photo, final String photoLink) {
+    /*public void updateGuestPhoto(final byte[] photo, final String photoLink) {
         if (guestPhoto == null) {
             guestPhoto = new GuestPhoto();
         }
         guestPhoto.update(photo, photoLink);
-    }
+    }*/
 
     public Long getNumber() {
         return number;
@@ -89,12 +89,12 @@ public class Podcast {
         this.contents = contents;
     }
 
-    public GuestPhoto getGuestPhoto() {
-        return guestPhoto;
+    public String getPhotoLink() {
+        return photoLink;
     }
 
-    public void setGuestPhoto(GuestPhoto guestPhoto) {
-        this.guestPhoto = guestPhoto;
+    public void setPhotoLink(String photoLink) {
+        this.photoLink = photoLink;
     }
 
     public Set<Book> getBooks() {
@@ -109,51 +109,6 @@ public class Podcast {
             }
         }
         this.books = books;
-    }
-
-
-    public static Builder getBuilder(Long number, String title) {
-        return new Builder(number, title);
-    }
-
-    public static class Builder {
-
-        private Podcast built;
-
-        public Builder (Long number, String title) {
-            built = new Podcast();
-            built.number = number;
-            built.title = title;
-        }
-
-        public Builder pageViews(Long pageViews) {
-            built.pageViews = pageViews;
-            return this;
-        }
-
-        public Builder announcement(String announcement) {
-            built.announcement = announcement;
-            return this;
-        }
-
-        public Builder contents(String contents) {
-            built.contents = contents;
-            return this;
-        }
-
-        public Builder guestPhoto(GuestPhoto guestPhoto) {
-            built.guestPhoto = guestPhoto;
-            return this;
-        }
-
-        public Builder books(Set<Book> books) {
-            built.books = books;
-            return this;
-        }
-
-        public Podcast build() {
-            return built;
-        }
     }
 
     @Override
