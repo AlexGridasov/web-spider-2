@@ -36,9 +36,6 @@ public class PodcastController {
         Podcast podcast = douParser.parseDocument(doc);
         podcast.setNumber(podcastNumber);
 
-//        String photoLink = podcast.getGuestPhoto().getPhotoLink();
-//        podcast.updateGuestPhoto(getImage(photoLink), photoLink);
-
         return podcast;
     }
 

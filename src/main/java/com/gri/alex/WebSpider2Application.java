@@ -36,7 +36,7 @@ public class WebSpider2Application {
 
         // 43 first, 267 last
         // ignore: 59, 89, 92, 99, 149, 253,
-        for (long index = 43; index <= 43; index++) {
+        for (long index = 43; index <= 267; index++) {
             if (!ignoreList.contains(index)) {
                 Long podcastNumber = index;
                 Podcast podcast = podcastController.createPodcastByNumber(podcastNumber);

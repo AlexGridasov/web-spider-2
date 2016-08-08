@@ -30,13 +30,15 @@ public class DouParser {
 
         if (articleElements != null && articleElements.size() > 0) {
             long pageViews = parsePageViews(doc);
-            String title = parseTitle(articleElements);
-            String announcement = parseAnnouncement(articleElements);
-            String guestPhoto = parseGuestPhoto(articleElements);
-
             podcast.setPageViews(pageViews);
+
+            String title = parseTitle(articleElements);
             podcast.setTitle(title);
+
+            String announcement = parseAnnouncement(articleElements);
             podcast.setAnnouncement(announcement);
+
+            String guestPhoto = parseGuestPhoto(articleElements);
             podcast.setPhotoLink(guestPhoto);
 
             Elements lists = articleElements.select("ul");

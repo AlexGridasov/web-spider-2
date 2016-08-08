@@ -4,7 +4,6 @@ import com.gri.alex.controller.PodcastController;
 import com.gri.alex.model.Podcast;
 import com.gri.alex.service.PodcastService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 
 import java.text.SimpleDateFormat;

@@ -23,6 +23,7 @@ spring:
         driverClassName: com.mysql.jdbc.Driver
         username: root
         password: root
+        connection-properties: useUnicode=true;characterEncoding=utf-8
 
     jpa.database-platform: org.hibernate.dialect.MySQL5Dialect
 
@@ -31,7 +32,7 @@ spring:
         hibernate.ddl-auto: create-drop
 
 # Pool
-spring.datasource.max-active: 50
+spring.datasource.max-active: 25
 spring.datasource.max-idle: 5
 spring.datasource.min-idle: 5
 spring.datasource.initial-size: 10
