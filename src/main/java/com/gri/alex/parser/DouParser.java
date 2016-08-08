@@ -34,21 +34,20 @@ public class DouParser {
             String announcement = parseAnnouncement(articleElements);
             String guestPhoto = parseGuestPhoto(articleElements);
 
-            Elements lists = articleElements.select("ul");
+            podcast.setPageViews(pageViews);
+            podcast.setTitle(title);
+            podcast.setAnnouncement(announcement);
+            podcast.setPhotoLink(guestPhoto);
 
+            Elements lists = articleElements.select("ul");
             if (lists.size() > 0) {
                 // contents
                 List<String> contents = parseContents(lists.get(0));
+                podcast.setContents(StringUtils.collectionToDelimitedString(contents, "||"));
 
                 if (lists.size() > 1) {
                     // books
                     Set<Book> bookSet = parseBooks(lists.get(1), "li");
-
-                    podcast.setPageViews(pageViews);
-                    podcast.setTitle(title);
-                    podcast.setAnnouncement(announcement);
-                    podcast.setPhotoLink(guestPhoto);
-                    podcast.setContents(StringUtils.collectionToDelimitedString(contents, "||"));
                     podcast.setBooks(bookSet);
                 }
             }

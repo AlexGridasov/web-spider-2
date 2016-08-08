@@ -1,5 +1,6 @@
 spring:
-    profiles.active: dev
+    profiles.active: devMySQL
+
 ---
 spring:
     profiles: dev
@@ -12,3 +13,25 @@ spring:
     jpa.database-platform: org.hibernate.dialect.H2Dialect
 
     jpa.hibernate.ddl-auto: create-drop
+
+---
+spring:
+    profiles: devMySQL
+
+    datasource:
+        url: jdbc:mysql://localhost:3306/itcareer?autoReconnect=true&amp;useUnicode=true&amp;createDatabaseIfNotExist=true&amp;characterEncoding=UTF-8
+        driverClassName: com.mysql.jdbc.Driver
+        username: root
+        password: root
+
+    jpa.database-platform: org.hibernate.dialect.MySQL5Dialect
+
+    jpa:
+        show-sql: true
+        hibernate.ddl-auto: create-drop
+
+# Pool
+spring.datasource.max-active: 50
+spring.datasource.max-idle: 5
+spring.datasource.min-idle: 5
+spring.datasource.initial-size: 10

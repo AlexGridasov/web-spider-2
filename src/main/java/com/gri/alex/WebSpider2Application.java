@@ -10,6 +10,10 @@ import org.springframework.context.ApplicationContext;
 import org.springframework.scheduling.annotation.EnableScheduling;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
 
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+
 /**
  * Created by Alex on 08-Jul-16.
  */
@@ -28,12 +32,17 @@ public class WebSpider2Application {
         podcastController = ctx.getBean("podcastController", PodcastController.class);
         podcastService = ctx.getBean("podcastService", PodcastService.class);
 
-        // 43 first, 267 last
-        for (long index = 50; index <= 100; index++) {
-            Long podcastNumber = index;
-            Podcast podcast = podcastController.createPodcastByNumber(podcastNumber);
+        List<Long> ignoreList = new ArrayList<>(Arrays.asList(59L, 89L, 92L, 99L, 149L, 253L));
 
-            podcastService.savePodcast(podcast);
+        // 43 first, 267 last
+        // ignore: 59, 89, 92, 99, 149, 253,
+        for (long index = 43; index <= 43; index++) {
+            if (!ignoreList.contains(index)) {
+                Long podcastNumber = index;
+                Podcast podcast = podcastController.createPodcastByNumber(podcastNumber);
+
+                podcastService.savePodcast(podcast);
+            }
         }
     }
 }

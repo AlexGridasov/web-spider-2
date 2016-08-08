@@ -27,7 +27,7 @@ public class Podcast {
     @Column(name = "TITLE", unique = true, nullable = false)
     private String title;
 
-    @Column(name = "ANNOUNCEMENT", unique = true)
+    @Column(name = "ANNOUNCEMENT", length = 500)
     private String announcement;
 
     @Column(name = "CONTENTS", unique = true, nullable = false, length = 1000)
@@ -39,15 +39,9 @@ public class Podcast {
     @OneToMany(mappedBy = "podcast", cascade = CascadeType.ALL)
     private Set<Book> books = new HashSet<>();
 
+
     public Podcast() {
     }
-
-    /*public void updateGuestPhoto(final byte[] photo, final String photoLink) {
-        if (guestPhoto == null) {
-            guestPhoto = new GuestPhoto();
-        }
-        guestPhoto.update(photo, photoLink);
-    }*/
 
     public Long getNumber() {
         return number;
