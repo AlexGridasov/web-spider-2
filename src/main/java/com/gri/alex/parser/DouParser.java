@@ -24,50 +24,70 @@ public class DouParser {
     private static final Logger LOGGER = Logger.getLogger(DouParser.class);
     public static final String HTTPS_PREFIX = "https:";
 
-    public Podcast parseDocument(Document doc) {
-        Podcast podcast = new Podcast();
+    public List<Podcast> parseDocument(Document doc) {
+        List<Podcast> podcasts = new ArrayList<>();
         Elements articleElements = doc.select("article");
 
         if (articleElements != null && articleElements.size() > 0) {
-            long pageViews = parsePageViews(doc);
-            podcast.setPageViews(pageViews);
+            for (int i = 0; i < articleElements.size(); i++) {
+                Element articleElement = articleElements.get(i);
+                Podcast podcast = new Podcast();
 
-            String title = parseTitle(articleElements);
-            podcast.setTitle(title);
+                long pageViews = parsePageViews(doc, i);
+                podcast.setPageViews(pageViews);
 
-            String announcement = parseAnnouncement(articleElements);
-            podcast.setAnnouncement(announcement);
+                long podcastNumber = parsePodcastNumber(articleElement, i);
+                podcast.setNumber(podcastNumber);
 
-            String guestPhoto = parseGuestPhoto(articleElements);
-            podcast.setPhotoLink(guestPhoto);
+                String title = parseTitle(articleElement);
+                podcast.setTitle(title);
 
-            Elements lists = articleElements.select("ul");
-            if (lists.size() > 0) {
-                // contents
-                List<String> contents = parseContents(lists.get(0));
-                podcast.setContents(StringUtils.collectionToDelimitedString(contents, "||"));
+                String announcement = parseAnnouncement(articleElement);
+                podcast.setAnnouncement(announcement);
 
-                if (lists.size() > 1) {
-                    // books
-                    Set<Book> bookSet = parseBooks(lists.get(1), "li");
-                    podcast.setBooks(bookSet);
+                String guestPhoto = parseGuestPhoto(articleElement);
+                podcast.setPhotoLink(guestPhoto);
+
+                Elements lists = articleElement.select("ul");
+                if (lists.size() > 0) {
+                    // contents
+                    List<String> contents = parseContents(lists.get(0));
+                    podcast.setContents(StringUtils.collectionToDelimitedString(contents, "||"));
+
+                    if (lists.size() > 1) {
+                        // books
+                        Set<Book> bookSet = parseBooks(lists.get(1), "li");
+                        podcast.setBooks(bookSet);
+                    }
                 }
+
+                podcasts.add(podcast);
             }
         }
 
-        return podcast;
+        return podcasts;
     }
 
-    public long parsePageViews(Document doc) {
+    private long parsePodcastNumber(Element elements, int i) {
+        Elements nobrElements = elements.select("nobr");
+        String numberAsString = nobrElements.get(0).text();
+        int defisIndex = numberAsString.indexOf("-");
+        long number = Long.valueOf(numberAsString.substring(0, defisIndex));
+        LOGGER.info("Выпуск : " + number);
+
+        return number;
+    }
+
+    public long parsePageViews(Document doc, int i) {
         Elements spanElements = doc.select("span[title=Количество просмотров].pageviews");
-        Element spanElement = spanElements.get(0);
+        Element spanElement = spanElements.get(i);
         long pageViews = Long.valueOf(spanElement.text());
         LOGGER.info("Количество просмотров: " + pageViews);
 
         return pageViews;
     }
 
-    public String parseTitle(Elements elements) {
+    public String parseTitle(Element elements) {
         Elements articleTitle = elements.select("h1");
         String title = articleTitle.text();
         LOGGER.info("Заголовок : " + title);
@@ -75,7 +95,7 @@ public class DouParser {
         return title;
     }
 
-    public String parseAnnouncement(Elements elements) {
+    public String parseAnnouncement(Element elements) {
         Element announcementElement = elements.select("p").first();
         String announcement = announcementElement.text();
         LOGGER.info("Анонс : " + announcement);
@@ -83,7 +103,7 @@ public class DouParser {
         return announcement;
     }
 
-    public String parseGuestPhoto(Elements elements) {
+    public String parseGuestPhoto(Element elements) {
         Element guestPhotoElement = elements.select("img").first();
         String guestPhoto = guestPhotoElement.attr("src");
         if (!guestPhoto.contains(HTTPS_PREFIX)) {

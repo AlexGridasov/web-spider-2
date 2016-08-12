@@ -55,7 +55,7 @@ public class DouParserTest {
 
     @Test
     public void testParsePageViews() throws Exception {
-        long pageViews = douParser.parsePageViews(doc);
+        long pageViews = douParser.parsePageViews(doc, i);
         assertEquals(2734, pageViews);
     }
 

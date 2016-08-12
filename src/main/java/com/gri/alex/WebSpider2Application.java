@@ -32,6 +32,17 @@ public class WebSpider2Application {
         podcastController = ctx.getBean("podcastController", PodcastController.class);
         podcastService = ctx.getBean("podcastService", PodcastService.class);
 
+        savePodcastsFromFile();
+    }
+
+    private static void savePodcastsFromFile() {
+        List<Podcast> podcasts =  podcastController.parsePodcastsFromFile();
+        for (Podcast podcast: podcasts) {
+            podcastService.savePodcast(podcast);
+        }
+    }
+
+    private static void savePodcastsFromWeb() {
         List<Long> ignoreList = new ArrayList<>(Arrays.asList(59L, 89L, 92L, 99L, 149L, 253L));
 
         // 43 first, 267 last

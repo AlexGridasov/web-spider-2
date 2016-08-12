@@ -7,11 +7,15 @@ import org.apache.log4j.Logger;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.io.Resource;
+import org.springframework.core.io.ResourceLoader;
 import org.springframework.stereotype.Component;
 
+import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.URL;
+import java.util.List;
 
 /**
  * Created by Alex on 09-Jul-16.
@@ -25,16 +29,35 @@ public class PodcastController {
 
     @Autowired
     private DouParser douParser;
+    @Autowired
+    private ResourceLoader resourceLoader;
 
     public PodcastController() {
     }
 
-    public Podcast createPodcastByNumber(long podcastNumber) {
-        LOGGER.info("Выпуск : " + podcastNumber);
+    public List<Podcast> parsePodcastsFromFile() {
+        Document doc = getHtmlDocumentFromFile("articles.html");
+        List<Podcast> podcasts = douParser.parseDocument(doc);
+        return podcasts;
+    }
 
+    private Document getHtmlDocumentFromFile(String name) {
+        Document doc = null;
+        try {
+            Resource resource = resourceLoader.getResource("classpath:" + name);
+            File input = resource.getFile();
+            doc = Jsoup.parse(input, "UTF-8", "https://dou.ua");
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+        return doc;
+    }
+
+    public Podcast createPodcastByNumber(long podcastNumber) {
         Document doc = getHtmlDocument(podcastNumber);
-        Podcast podcast = douParser.parseDocument(doc);
-        podcast.setNumber(podcastNumber);
+        Podcast podcast = douParser.parseDocument(doc).get(0);
+//        podcast.setNumber(podcastNumber);
 
         return podcast;
     }

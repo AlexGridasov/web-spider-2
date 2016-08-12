@@ -30,7 +30,7 @@ public class Podcast {
     @Column(name = "ANNOUNCEMENT", length = 500)
     private String announcement;
 
-    @Column(name = "CONTENTS", unique = true, nullable = false, length = 1000)
+    @Column(name = "CONTENTS", unique = true, length = 1000)
     private String contents;
 
     @Column(name = "PHOTO_LINK")
